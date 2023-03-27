@@ -12,7 +12,7 @@ resource "aws_lambda_function" "optimize_lambda" {
 
   environment {
     variables = {
-      AWS_LOCKING_PROVIDER = "dynamodb"
+      AWS_S3_LOCKING_PROVIDER = "dynamodb"
       DATALAKE_LOCATION    = "s3://my-bucket/databases/my-table"
       RUST_LOG             = "info"
     }
