@@ -1,8 +1,19 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+:toc: macro
+
 = Delta Optimize Lambda
 
 This Lambda function can be used with a periodic trigger to optimize a
 configured link:https://delta.io[Delta Lake] table. Consult the `deployment.tf`
 file for an example of how to provision the function in AWS.
+
+toc::[]
 
 == Building
 
