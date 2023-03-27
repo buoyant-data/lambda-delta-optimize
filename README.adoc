@@ -1,37 +1,59 @@
-= Optimizing Lambda
+= Delta Optimize Lambda
 
-This Lambda function exists to optimize the given table on a regular basis.
+This Lambda function can be used with a periodic trigger to optimize a
+configured link:https://delta.io[Delta Lake] table. Consult the `deployment.tf`
+file for an example of how to provision the function in AWS.
 
-== Infrastructure requirements
+== Building
 
-In order to deploy this in AWS Lambda, it must first be built with the `cargo lambda` command line tool, e.g.:
+Building and testing the Lambda can be done with cargo: `cargo test build`.
+
+In order to deploy this in AWS Lambda, it must first be built with the `cargo
+lambda` command line tool, e.g.:
 
 [source,bash]
 ----
-cargo lambda build --release --output zip
+cargo lambda build --release --output-format zip
 ----
 
-This will produce the file: `target/lambda/http-to-delta/bootstrap.zip`
+This will produce the file: `target/lambda/lambda-delta-optimize/bootstrap.zip`
+
+== Infrastructure
+
+The `deployment.tf` file contains the necessary Terraform to provision the
+function, a DynamoDB table for locking, and IAM permissions. This Terraform
+does *not* provision an S3 bucket to optimize.
+
+After configuring the necessary authentication for Terraform, the following
+steps can be used to provision:
+
+[source,bash]
+----
+cargo lambda build --release --output-format zip
+terraform init
+terraform plan
+terraform apply
+----
+
+[NOTE]
+====
+Terraform configures the Lambda to run with the smallest amount of memory allowed. For a sizable table, this may not be sufficient for larger tables.
+====
 
 === Environment variables
+
+The following environment variables must be set for the function to run properly
 
 |===
 | Name | Value | Notes
 
 | `DATALAKE_LOCATION`
 | `s3://my-bucket-name/databases/bronze/http`
-| The `s3://` URL of the desired bucket to be written, with the prefix for the specific table this function should write to such as in the example value.
+| The `s3://` URL of the desired table to optimize.
+
 
 | `AWS_S3_LOCKING_PROVIDER`
 | `dynamodb`
 | This instructs the `deltalake` crate to use DynamoDB for locking to provide consistent writes into s3.
 
 |===
-
-=== AWS configuration
-
-In addition to setting up the Lambda function with the custom runtime, an S3 bucket for writing Delta records to must be created. The execution role for the Lambda must have access to perform S3 operations on that bucket, as well as access DynamoDB.
-
-Create a DynamoDB table named `delta_rs_lock_table` with the partition key of
-`key`. This will ensure consistent writes to S3 among multiple Lambda
-functions.
