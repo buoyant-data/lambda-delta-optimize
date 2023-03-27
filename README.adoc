@@ -1,0 +1,37 @@
+= Optimizing Lambda
+
+This Lambda function exists to optimize the given table on a regular basis.
+
+== Infrastructure requirements
+
+In order to deploy this in AWS Lambda, it must first be built with the `cargo lambda` command line tool, e.g.:
+
+[source,bash]
+----
+cargo lambda build --release --output zip
+----
+
+This will produce the file: `target/lambda/http-to-delta/bootstrap.zip`
+
+=== Environment variables
+
+|===
+| Name | Value | Notes
+
+| `DATALAKE_LOCATION`
+| `s3://my-bucket-name/databases/bronze/http`
+| The `s3://` URL of the desired bucket to be written, with the prefix for the specific table this function should write to such as in the example value.
+
+| `AWS_S3_LOCKING_PROVIDER`
+| `dynamodb`
+| This instructs the `deltalake` crate to use DynamoDB for locking to provide consistent writes into s3.
+
+|===
+
+=== AWS configuration
+
+In addition to setting up the Lambda function with the custom runtime, an S3 bucket for writing Delta records to must be created. The execution role for the Lambda must have access to perform S3 operations on that bucket, as well as access DynamoDB.
+
+Create a DynamoDB table named `delta_rs_lock_table` with the partition key of
+`key`. This will ensure consistent writes to S3 among multiple Lambda
+functions.
