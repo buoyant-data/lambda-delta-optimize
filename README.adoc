@@ -67,6 +67,10 @@ The following environment variables must be set for the function to run properly
 | `dynamodb`
 | This instructs the `deltalake` crate to use DynamoDB for locking to provide consistent writes into s3.
 
+| `OPTIMIZE_DS`
+| `yesterday`
+| Only apply optimizations to the `ds` partition (`YYYY-mm-dd`), the `yesterday` value will use the previous day UTC
+
 |===
 
 == Licensing

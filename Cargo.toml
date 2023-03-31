@@ -1,11 +1,13 @@
 [package]
 name = "lambda-delta-optimize"
+description = "Simple AWS Lambda for optimizing Delta tables"
 version = "0.1.0"
-author = "R Tyler Croy <rtyler@brokenco.de>"
+authors = ["R Tyler Croy <rtyler@brokenco.de>"]
 edition = "2021"
 
 [dependencies]
 aws_lambda_events = { version = "0.7" }
+chrono = "*"
 deltalake = { git = "https://github.com/delta-io/delta-rs", branch = "main", features = ["arrow", "parquet", "s3"]}
 lambda_runtime = { version = "0.7" }
 log = "0.4"
