@@ -15,6 +15,7 @@ resource "aws_lambda_function" "optimize_lambda" {
       AWS_S3_LOCKING_PROVIDER = "dynamodb"
       DATALAKE_LOCATION    = "s3://my-bucket/databases/my-table"
       RUST_LOG             = "info"
+      OPTIMIZE_DS          = "yesterday"
     }
   }
 }
