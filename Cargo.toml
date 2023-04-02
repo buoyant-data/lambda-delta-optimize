@@ -4,6 +4,7 @@ description = "Simple AWS Lambda for optimizing Delta tables"
 version = "0.1.0"
 authors = ["R Tyler Croy <rtyler@brokenco.de>"]
 edition = "2021"
+license = "AGPL-3.0-or-later"
 
 [dependencies]
 aws_lambda_events = { version = "0.7" }
